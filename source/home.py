@@ -1,12 +1,47 @@
 shutil.copy(base + '/raman.jpg', out + '/images/raman-photo.jpg')
 SITE = 'https://maths-with-raman.pages.dev/'
 SUBSTACK = 'https://rrtiwari.substack.com'
-square = '''<svg class="sq" viewBox="40 40 460 460" role="img" aria-label="Area model of (a + b) squared">
-<g font-family="Georgia,serif" font-style="italic" text-anchor="middle" transform="translate(40 40)">
-<rect width="270" height="270" fill="#4cc9e0"/><rect x="270" width="190" height="270" fill="#d6409f"/>
-<rect y="270" width="270" height="190" fill="#d6409f"/><rect x="270" y="270" width="190" height="190" fill="#f5c542"/>
-<g font-size="64" fill="#101a2e"><text x="135" y="160">a<tspan dy="-22" font-size="36">2</tspan></text><text x="365" y="160" fill="#fff">ab</text><text x="135" y="390" fill="#fff">ab</text><text x="365" y="390">b<tspan dy="-22" font-size="36">2</tspan></text></g>
-</g></svg>'''
+
+def _art():
+    W,H=560,440
+    layers=[(70,[150,290]),(205,[80,185,255,360]),(340,[80,185,255,360]),(460,[220])]
+    cols=['#4cc9e0','#d6409f']
+    o=[]
+    o.append('<defs><pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".10"/></pattern>'
+             '<linearGradient id="hot" x1="0" x2="1"><stop offset="0" stop-color="#4cc9e0"/><stop offset=".55" stop-color="#d6409f"/><stop offset="1" stop-color="#f5c542"/></linearGradient></defs>')
+    o.append(f'<rect width="{W}" height="{H}" fill="url(#dots)"/>')
+    # faint symbols
+    syms=[('Σ',24,52,54),('π',470,60,50),('∫',30,410,56),('</>',420,410,34),('x²',250,34,32),('{ }',478,396,30),('0110',130,425,22)]
+    for t,x,y,sz in syms:
+        o.append(f'<text x="{x}" y="{y}" font-family="Georgia,serif" font-style="italic" font-size="{sz}" fill="#fff" fill-opacity=".16">{t}</text>')
+    # edges
+    for li in range(len(layers)-1):
+        x1,ys1=layers[li]; x2,ys2=layers[li+1]
+        for i,y1 in enumerate(ys1):
+            for j,y2 in enumerate(ys2):
+                hot=(li+i+j)%5==0
+                o.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{"url(#hot)" if hot else "#9fb3d1"}" stroke-opacity="{.9 if hot else .22}" stroke-width="{2.4 if hot else 1}"/>')
+    # nodes
+    for li,(x,ys) in enumerate(layers[:-1]):
+        for i,y in enumerate(ys):
+            c=cols[i%2] if li==0 else ('#9fb3d1' if (i+li)%3 else '#f5c542')
+            r=22 if li==0 else 13
+            o.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="#101a2e" stroke="{c}" stroke-width="3"/>')
+            if li==0:
+                o.append(f'<text x="{x}" y="{y+9}" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="26" fill="{c}">{"ab"[i]}</text>')
+            else:
+                o.append(f'<circle cx="{x}" cy="{y}" r="4" fill="{c}"/>')
+    # output: mini area model tile
+    ox,oy=460,220
+    o.append(f'<g transform="translate({ox-60} {oy-60}) scale(1.33)" font-family="Georgia,serif" font-style="italic" text-anchor="middle" font-size="22">'
+             '<rect width="52" height="52" fill="#4cc9e0"/><rect x="52" width="38" height="52" fill="#d6409f"/><rect y="52" width="52" height="38" fill="#d6409f"/><rect x="52" y="52" width="38" height="38" fill="#f5c542"/>'
+             '<text x="26" y="34" fill="#101a2e">a²</text><text x="71" y="34" fill="#fff">ab</text><text x="26" y="78" fill="#fff">ab</text><text x="71" y="78" fill="#101a2e">b²</text></g>')
+    o.append(f'<text x="{ox}" y="{oy+92}" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="26" fill="#fff">(a + b)²</text>')
+    # circuit trace
+    o.append('<g fill="none" stroke="#4cc9e0" stroke-opacity=".5" stroke-width="2"><path d="M20 398H110V380H200"/><path d="M250 420H330V400H400"/></g>'
+             '<g fill="#4cc9e0" fill-opacity=".7"><circle cx="200" cy="380" r="4"/><circle cx="400" cy="400" r="4"/></g>')
+    return ('<svg class="sq" viewBox="0 0 %d %d" role="img" aria-label="A neural network whose inputs a and b produce the area model of (a + b) squared">'%(W,H))+''.join(o)+'</svg>'
+square=_art()
 home = f'''<!doctype html>
 <html lang="en-GB">
 <head>
@@ -33,12 +68,12 @@ a:focus-visible{{outline:3px solid var(--accent);outline-offset:3px;border-radiu
 .bar b{{font:700 17px/1 var(--serif)}}
 .bar nav{{display:flex;gap:22px}}
 .bar a{{color:#c9d4ea}}
-.hero-in{{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:center;padding-top:48px;padding-bottom:64px}}
+.hero-in{{display:grid;grid-template-columns:minmax(0,1fr) 500px;gap:40px;align-items:center;padding-top:48px;padding-bottom:64px}}
 h1{{font:700 clamp(36px,5.6vw,64px)/1.05 var(--serif);letter-spacing:-.02em;margin:0 0 18px}}
 .hero p{{font-size:clamp(19px,2.2vw,23px);line-height:1.5;color:#b9c6e0;margin:0;max-width:30em}}
 .sq{{width:100%;height:auto;display:block}}
-.about{{display:grid;grid-template-columns:200px minmax(0,640px);gap:48px;padding-top:64px;padding-bottom:24px;align-items:start}}
-.about img{{width:200px;height:200px;border-radius:12px;object-fit:cover;background:var(--card)}}
+.about{{display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px;padding-top:64px;padding-bottom:24px;align-items:center}}
+.about img{{width:240px;height:240px;border-radius:50%;object-fit:cover;display:block}}
 h2{{font:700 clamp(26px,3vw,32px)/1.2 var(--serif);margin:0 0 14px}}
 .about p{{margin:0 0 14px}}
 .facts{{font:15px/1.5 var(--ui);color:var(--muted);margin:18px 0 0;padding:0;list-style:none}}
@@ -54,8 +89,8 @@ h2{{font:700 clamp(26px,3vw,32px)/1.2 var(--serif);margin:0 0 14px}}
 footer{{border-top:1px solid var(--line);padding-top:24px;padding-bottom:40px;color:var(--muted);font:14px/1.6 var(--ui)}}
 @media (max-width:820px){{
 .hero-in{{grid-template-columns:1fr;gap:32px;padding-bottom:44px}}
-.sq{{max-width:240px}}
-.about{{grid-template-columns:1fr;gap:24px;padding-top:44px}}
+.sq{{max-width:100%}}
+.about{{grid-template-columns:1fr;gap:24px;padding-top:44px;align-items:start}}
 .about img{{width:128px;height:128px}}
 .card{{grid-template-columns:1fr;gap:16px}}
 body{{font-size:18px}}
@@ -66,7 +101,7 @@ body{{font-size:18px}}
 <header class="hero">
 <div class="bar"><b>Maths with Raman</b><nav><a href="https://x.com/RRTiwari19">X</a><a href="{SUBSTACK}">Substack</a></nav></div>
 <div class="hero-in">
-<div><h1>Maths with Raman</h1><p>Practical guides for teachers, from a maths classroom in Mainpuri. I try a tool with a real chapter, then write down what worked and what did not.</p></div>
+<div><h1>Maths with Raman</h1><p>Practical guides for teachers, from a maths classroom and the examination office of a CBSE school. Teaching ideas, exam workflows and AI tools, tested in real school work and written up step by step.</p></div>
 {square}
 </div>
 </header>
