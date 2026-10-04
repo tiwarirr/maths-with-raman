@@ -3,242 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How I Turned an NCERT Chapter into a Live-Class Teaching Workflow with Gemini Notebook</title>
-<meta name="description" content="A step-by-step guide to Interactive Reports, with the exact prompt, the checks I ran and the cards I would actually use">
-<meta name="author" content="Radha Raman Tiwari">
-<meta property="og:type" content="article">
-<meta property="og:title" content="How I Turned an NCERT Chapter into a Live-Class Teaching Workflow with Gemini Notebook">
-<meta property="og:description" content="A step-by-step guide to Interactive Reports, with the exact prompt, the checks I ran and the cards I would actually use">
-<meta property="og:image" content="images/09-infographic.jpg">
-<link rel="alternate" href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">
+<title>Maths with Raman</title>
+<meta name="description" content="Practical how-to guides for teachers, written by Radha Raman Tiwari, a maths teacher in Mainpuri.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Maths with Raman">
+<meta property="og:description" content="Practical how-to guides for teachers, written by Radha Raman Tiwari, a maths teacher in Mainpuri.">
+<meta property="og:image" content="https://maths-with-raman.pages.dev/images/09-infographic.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="images/raman.png">
 <style>
-:root{--bg:#fff;--fg:#1a2233;--muted:#5b6578;--accent:#b3267a;--line:#e3e6ec;--card:#f5f7fa;--code:#f1f3f7;--ink:#101a2e;--serif:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;--ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1424;--fg:#e6eaf2;--muted:#9aa6bd;--accent:#ff7cc3;--line:#26324a;--card:#141d33;--code:#18223a}}
+:root{--bg:#fff;--fg:#1a2233;--muted:#5b6578;--accent:#b3267a;--line:#e3e6ec;--card:#f5f7fa;--ink:#101a2e;--serif:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;--ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1424;--fg:#e6eaf2;--muted:#9aa6bd;--accent:#ff7cc3;--line:#26324a;--card:#141d33}}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--bg);color:var(--fg);font:19px/1.75 var(--serif);-webkit-text-size-adjust:100%}
 a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
-.top{max-width:1120px;margin:0 auto;padding:40px 24px 28px}
-h1{font:700 clamp(30px,4.2vw,46px)/1.12 var(--serif);letter-spacing:-.015em;margin:0 0 16px;max-width:24ch}
-.sub{font:400 clamp(18px,2vw,21px)/1.5 var(--serif);color:var(--muted);margin:0 0 22px;max-width:34em}
-.author{display:flex;align-items:center;gap:14px;font:15px/1.4 var(--ui)}
-.author img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:var(--code)}
-.author b{display:block;font-size:16px}
-.author span{color:var(--muted)}
-.author .links{margin-left:auto;display:flex;gap:20px;white-space:nowrap}
-.hero{margin:0;background:var(--ink);overflow:hidden}
-.hero-art{display:block;width:100%;height:auto;max-height:480px;margin:0 auto}
-@media (max-width:700px){.hero-art{width:190%;max-width:none;max-height:none;margin-left:-88%}}
-.layout{max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:230px minmax(0,700px);gap:64px;justify-content:center}
-aside{position:relative}
-aside nav{position:sticky;top:32px;padding:40px 0;font:15px/1.4 var(--ui);max-height:100vh;overflow-y:auto}
-aside b{display:block;margin-bottom:12px;color:var(--muted);font-weight:600}
-aside ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
-aside li{margin:0}
-aside a{display:block;padding:7px 0 7px 16px;margin-left:-2px;border-left:2px solid transparent;color:var(--muted);text-decoration:none}
-aside a:hover{color:var(--fg)}
-aside a.on{color:var(--fg);font-weight:600;border-left-color:var(--accent)}
-.sub-m{display:none;font:15px/1.5 var(--ui);margin:0 0 12px}
-.toc-m{display:none;margin:0 0 8px;border:1px solid var(--line);border-radius:8px;font:15px/1.5 var(--ui)}
-.toc-m summary{padding:12px 16px;cursor:pointer;font-weight:600}
-.toc-m ol{margin:0;padding:0 16px 14px 36px}
-main{padding:40px 0 0;min-width:0}
-h2{font:700 clamp(25px,3vw,31px)/1.25 var(--serif);letter-spacing:-.01em;margin:56px 0 14px;scroll-margin-top:24px}
-main>h2:first-child,main>p.lead+h2{margin-top:48px}
-h3{font:700 21px/1.3 var(--serif);margin:32px 0 8px}
-p.lead{font-size:22px;line-height:1.6;margin-top:0}
-figure{margin:28px 0;text-align:center}
-figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
-figcaption{font:15px/1.5 var(--ui);color:var(--muted);margin-top:10px}
-pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:16px 18px;overflow-x:auto;font:14px/1.6 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
-.table-wrap{overflow-x:auto;margin:22px 0}
-table{border-collapse:collapse;width:100%;font:15px/1.5 var(--ui)}
-th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:var(--code);border-bottom:2px solid var(--line)}
-li{margin:6px 0}
-.cta{margin:56px 0 24px;padding:22px 24px;border-left:4px solid var(--accent);background:var(--card);font:17px/1.6 var(--ui)}
-footer{max-width:1120px;margin:40px auto 0;padding:24px;border-top:1px solid var(--line);color:var(--muted);font:14px/1.6 var(--ui)}
-@media (max-width:960px){
-.layout{display:block;max-width:728px}
-aside{display:none}
-.toc-m{display:block}
-.sub-m{display:block}
-.top{padding-top:36px}
-.author .links{display:none}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+.hero{background:var(--ink);color:#fff}
+.bar,.hero-in,.about,.guides,footer{max-width:1040px;margin:0 auto;padding-left:24px;padding-right:24px}
+.bar{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font:15px/1 var(--ui)}
+.bar b{font:700 17px/1 var(--serif)}
+.bar nav{display:flex;gap:22px}
+.bar a{color:#c9d4ea}
+.hero-in{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:center;padding-top:48px;padding-bottom:64px}
+h1{font:700 clamp(36px,5.6vw,64px)/1.05 var(--serif);letter-spacing:-.02em;margin:0 0 18px}
+.hero p{font-size:clamp(19px,2.2vw,23px);line-height:1.5;color:#b9c6e0;margin:0;max-width:30em}
+.sq{width:100%;height:auto;display:block}
+.about{display:grid;grid-template-columns:200px minmax(0,640px);gap:48px;padding-top:64px;padding-bottom:24px;align-items:start}
+.about img{width:200px;height:200px;border-radius:12px;object-fit:cover;background:var(--card)}
+h2{font:700 clamp(26px,3vw,32px)/1.2 var(--serif);margin:0 0 14px}
+.about p{margin:0 0 14px}
+.facts{font:15px/1.5 var(--ui);color:var(--muted);margin:18px 0 0;padding:0;list-style:none}
+.facts li{margin:4px 0}
+.guides{padding-top:40px;padding-bottom:56px}
+.card{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:28px;align-items:center;margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:inherit;text-decoration:none}
+.card:hover{border-color:var(--accent)}
+.card img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line);background:#fff}
+.card h3{font:700 clamp(22px,2.4vw,28px)/1.25 var(--serif);margin:0 0 10px}
+.card p{margin:0 0 12px;font-size:17px;line-height:1.6;color:var(--muted)}
+.card .go{font:600 15px var(--ui);color:var(--accent)}
+.soon{margin:18px 0 0;font:15px/1.5 var(--ui);color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-top:24px;padding-bottom:40px;color:var(--muted);font:14px/1.6 var(--ui)}
+@media (max-width:820px){
+.hero-in{grid-template-columns:1fr;gap:32px;padding-bottom:44px}
+.sq{max-width:240px}
+.about{grid-template-columns:1fr;gap:24px;padding-top:44px}
+.about img{width:128px;height:128px}
+.card{grid-template-columns:1fr;gap:16px}
 body{font-size:18px}
 }
-@media print{aside,.toc-m,.hero{display:none}body{background:#fff;color:#000}}
 </style>
 </head>
 <body>
-<header class="top">
-<h1>How I Turned an NCERT Chapter into a Live-Class Teaching Workflow with Gemini Notebook</h1>
-<p class="sub">A step-by-step guide to Interactive Reports, with the exact prompt, the checks I ran and the cards I would actually use</p>
-<div class="author">
-<img src="images/raman.png" alt="">
-<div><b>Radha Raman Tiwari</b><span>Maths teacher and Head of Examination, Suditi Global Academy, Mainpuri</span></div>
-<span class="links"><a href="https://x.com/RRTiwari19">@RRTiwari19 on X</a><a href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">Also on Substack</a></span>
+<header class="hero">
+<div class="bar"><b>Maths with Raman</b><nav><a href="https://x.com/RRTiwari19">X</a><a href="https://rrtiwari.substack.com">Substack</a></nav></div>
+<div class="hero-in">
+<div><h1>Maths with Raman</h1><p>Practical guides for teachers, from a maths classroom in Mainpuri. I try a tool with a real chapter, then write down what worked and what did not.</p></div>
+<svg class="sq" viewBox="40 40 460 460" role="img" aria-label="Area model of (a + b) squared">
+<g font-family="Georgia,serif" font-style="italic" text-anchor="middle" transform="translate(40 40)">
+<rect width="270" height="270" fill="#4cc9e0"/><rect x="270" width="190" height="270" fill="#d6409f"/>
+<rect y="270" width="270" height="190" fill="#d6409f"/><rect x="270" y="270" width="190" height="190" fill="#f5c542"/>
+<g font-size="64" fill="#101a2e"><text x="135" y="160">a<tspan dy="-22" font-size="36">2</tspan></text><text x="365" y="160" fill="#fff">ab</text><text x="135" y="390" fill="#fff">ab</text><text x="365" y="390">b<tspan dy="-22" font-size="36">2</tspan></text></g>
+</g></svg>
 </div>
 </header>
-<div class="hero"><svg class="hero-art" viewBox="0 0 1600 620" role="img" aria-labelledby="hero-t" preserveAspectRatio="xMidYMid meet">
-<title id="hero-t">Area model of (a + b) squared: a square split into a squared, two rectangles of area ab, and b squared</title>
-<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".06"/></pattern></defs>
-<rect width="1600" height="620" fill="#101a2e"/><rect width="1600" height="620" fill="url(#g)"/>
-<g font-family="Georgia,'Times New Roman',serif" fill="#fff">
-<text x="130" y="250" font-size="92" font-style="italic">(a + b)<tspan dy="-34" font-size="54">2</tspan></text>
-<text x="130" y="350" font-size="64" font-style="italic" fill="#9fb3d1">= a<tspan dy="-22" font-size="38">2</tspan><tspan dy="22"> + 2ab + b</tspan><tspan dy="-22" font-size="38">2</tspan></text>
-<text x="130" y="440" font-family="system-ui,sans-serif" font-size="26" fill="#9fb3d1">Class IX, NCERT, Chapter 4</text>
-</g>
-<g transform="translate(930 90)" font-family="Georgia,serif" font-style="italic" text-anchor="middle">
-<rect x="0" y="0" width="270" height="270" fill="#4cc9e0"/>
-<rect x="270" y="0" width="190" height="270" fill="#d6409f"/>
-<rect x="0" y="270" width="270" height="190" fill="#d6409f"/>
-<rect x="270" y="270" width="190" height="190" fill="#f5c542"/>
-<g fill="#101a2e" font-size="64"><text x="135" y="160">a<tspan dy="-22" font-size="36">2</tspan></text><text x="365" y="160" fill="#fff">ab</text><text x="135" y="390" fill="#fff">ab</text><text x="365" y="390">b<tspan dy="-22" font-size="36">2</tspan></text></g>
-<g fill="#9fb3d1" font-size="34"><text x="135" y="-18">a</text><text x="365" y="-18">b</text><text x="-34" y="148">a</text><text x="-34" y="378">b</text></g>
-<path d="M0 -50H460M-50 0V460" stroke="#9fb3d1" stroke-opacity=".5" fill="none"/>
-</g></svg></div>
-<div class="layout">
-<aside><nav aria-label="Contents"><b>In this guide</b><ol id="toc"><li><a href="#before-you-start">Before you start</a></li><li><a href="#step-1">Step 1: Add the chapter as a source</a></li><li><a href="#step-2">Step 2: Open Reports and choose Interactive</a></li><li><a href="#step-3">Step 3: Paste the prompt</a></li><li><a href="#step-4">Step 4: What the report gives you</a></li><li><a href="#step-5">Step 5: Add a card to the report</a></li><li><a href="#step-6">Step 6: Choose the right card for the right job</a></li><li><a href="#check">Check before class</a></li><li><a href="#wrong">When it goes wrong</a></li><li><a href="#live">Using it in the live class</a></li><li><a href="#verdict">My verdict</a></li><li><a href="#sources">Sources</a></li></ol></nav></aside>
 <main>
-<p class="sub-m">Also published on <a href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">Substack</a>.</p>
-<details class="toc-m"><summary>In this guide</summary><ol><li><a href="#before-you-start">Before you start</a></li><li><a href="#step-1">Step 1: Add the chapter as a source</a></li><li><a href="#step-2">Step 2: Open Reports and choose Interactive</a></li><li><a href="#step-3">Step 3: Paste the prompt</a></li><li><a href="#step-4">Step 4: What the report gives you</a></li><li><a href="#step-5">Step 5: Add a card to the report</a></li><li><a href="#step-6">Step 6: Choose the right card for the right job</a></li><li><a href="#check">Check before class</a></li><li><a href="#wrong">When it goes wrong</a></li><li><a href="#live">Using it in the live class</a></li><li><a href="#verdict">My verdict</a></li><li><a href="#sources">Sources</a></li></ol></details>
-<p class="lead">I teach maths at Suditi Global Academy, Mainpuri, and every new chapter starts with the same question: how will I teach it, period by period? This time I handed that first draft to Gemini Notebook's Interactive Reports. In about 90 seconds it turned one NCERT Class IX chapter into a six-period teaching workflow. Here are the clicks I made, the prompt I used, and the checks I ran before taking it into class.</p>
-<h2 id="before-you-start">Before you start</h2>
-<p>All you need is a Google account that can use Gemini Notebook, the chapter PDF from NCERT, and about ten minutes. Three things I noted before starting:</p>
-<ul>
-<li><p><strong>The Class IX book has changed.</strong> Class IX Maths is now <em>Ganita Manjari</em> Part I, with 8 chapters. I used Chapter 4, <em>Exploring Algebraic Identities</em>. Chapter numbers and titles differ from the old 12-chapter book, so check yours against the new one.</p></li>
-<li><p><strong>I keep it private.</strong> NCERT allows its books to be downloaded as a textbook or reference, but forbids republishing or hosting them online. I use the PDF only inside my own notebook and I do not embed it in this blog.</p></li>
-<li><p><strong>I use the official PDF</strong> from the NCERT textbooks page, not a third-party copy.</p></li>
-</ul>
-<h2 id="step-1">Step 1: Add the chapter as a source</h2>
-<p>I opened Gemini Notebook, clicked <strong>New notebook</strong>, then <strong>Add sources</strong>. You can choose <strong>Upload files</strong> for a PDF you have downloaded, or <strong>Websites</strong> to paste the chapter's web address. I pasted the address of the official NCERT chapter PDF.</p>
-<figure><a href="images/02-add-sources.jpg"><img src="images/02-add-sources.jpg" alt="The Add sources dialog. Upload the PDF, or paste its web address under Websites (1)." loading="lazy"></a><figcaption>The Add sources dialog. Upload the PDF, or paste its web address under Websites (1).</figcaption></figure>
-<p>I waited for the spinner beside the source to finish; mine took about 30 seconds. The notebook then named itself after the chapter, which was my quick sign that it had read the right file. I renamed it to something I would recognise: "Class IX Maths - Exploring Algebraic Identities - Teaching Workflow".</p>
-<h2 id="step-2">Step 2: Open Reports and choose Interactive</h2>
-<p>In the <strong>Studio</strong> panel on the right, I clicked <strong>Reports</strong> (marked "New!").</p>
-<figure><a href="images/01-studio-reports.jpg"><img src="images/01-studio-reports.jpg" alt="The Studio panel. Reports (1) sits beside Flashcards." loading="lazy"></a><figcaption>The Studio panel. Reports (1) sits beside Flashcards.</figcaption></figure>
-<p>In the <strong>Create report</strong> dialog I picked <strong>Interactive</strong> (1) rather than <strong>Document</strong>. Interactive reports embed Studio content such as infographics and quizzes between the sections; Document is text only. Then I clicked the pencil icon (2) on the <strong>Learning overview</strong> template to open the instruction box.</p>
-<figure><a href="images/03-create-report.jpg"><img src="images/03-create-report.jpg" alt="Choose Interactive (1), then the pencil (2)." loading="lazy"></a><figcaption>Choose Interactive (1), then the pencil (2).</figcaption></figure>
-<h2 id="step-3">Step 3: Paste the prompt</h2>
-<p>I chose the language and pasted my instruction into "Describe the report that you want to create". This step decides how useful the result is: I named the periods, the board-work order, the hinge questions and the exercise mapping, and the report followed them.</p>
-<figure><a href="images/04-prompt.jpg"><img src="images/04-prompt.jpg" alt="The instruction box with the prompt pasted in." loading="lazy"></a><figcaption>The instruction box with the prompt pasted in.</figcaption></figure>
-<p>The full prompt I recommend:</p>
-<pre><code>Create a live-class Teaching Workflow for this chapter, for a Class IX CBSE Maths teacher. Use only the uploaded source. Structure it as a sequence of 40-minute class periods. For each period include: (1) a measurable learning objective, (2) 2-3 recall questions, (3) a hook, (4) a step-by-step board-work sequence using the chapter's examples in order, (5) 2-3 hinge questions with expected answers and likely misconceptions, (6) one short pair activity, (7) classwork and homework mapped to the chapter's exercises, (8) a 3-minute exit ticket. Add a final section on common errors, differentiation and competency-based question ideas. Keep each period concise so the whole report fits. Write every mathematical symbol in standard LaTeX.</code></pre>
-<p>The last two sentences are fixes. My first run, without them, was cut off and printed some symbols wrongly (see "When it goes wrong" below). I ran the original wording and then a narrower follow-up; I have not yet run this exact combined version, so test it on your own chapter.</p>
-<p>Two shorter versions you can adapt:</p>
-<pre><code>Create a one-period (40-minute) live-class Teaching Workflow for [topic or examples] from this chapter, for a Class IX CBSE Maths teacher. Include a learning objective, 2 recall questions, a hook, a board-work sequence using the chapter's examples in order, 2 hinge questions with expected answers and misconceptions, one pair activity, classwork and homework mapped to the chapter's exercises, and a 3-minute exit ticket. Use only the source. Write all symbols in standard LaTeX.</code></pre>
-<pre><code>Create a single 40-minute revision lesson for this chapter for Class IX CBSE Maths. Use only the source. Include a 5-minute retrieval quiz, the three or four ideas students most often get wrong (with a corrected worked example for each), a 15-minute mixed-practice sequence ordered from easy to hard using questions from the chapter's exercises, a 5-minute error-spotting task, differentiation for support and extension, and a 3-minute exit ticket. Write all symbols in standard LaTeX.</code></pre>
-<p>Then I clicked <strong>Generate now</strong>. My first report took about 80 seconds.</p>
-<h2 id="step-4">Step 4: What the report gives you</h2>
-<p>The finished report appeared in the Studio list. I opened it: a contents list on the left, then one section per period. It suggested six 40-minute periods for the chapter.</p>
-<figure><a href="images/05-report-intro.jpg"><img src="images/05-report-intro.jpg" alt="The report opens with an introduction, then Period 1 onwards. The contents list (1) shows every period." loading="lazy"></a><figcaption>The report opens with an introduction, then Period 1 onwards. The contents list (1) shows every period.</figcaption></figure>
-<p>Each period follows the eight headings in the prompt: learning objective, recall questions, hook, board-work sequence, hinge questions, pair activity, classwork and homework mapped to exercise sets, and an exit ticket. Here is Period 5, where the cubic identities are worked in textbook order and the hinge questions come with expected answers and the misconception to listen for.</p>
-<figure><a href="images/06-board-hinge.jpg"><img src="images/06-board-hinge.jpg" alt="Period 5. The hinge questions (1) give the answer you expect and the mistake students are likely to make." loading="lazy"></a><figcaption>Period 5. The hinge questions (1) give the answer you expect and the mistake students are likely to make.</figcaption></figure>
-<h2 id="step-5">Step 5: Add a card to the report</h2>
-<p>Below each period the report offers a "Recommended" card: infographic, flashcards, slide deck, mind map, video or quiz. Clicking <strong>Add</strong> turns the suggestion into real material.</p>
-<figure><a href="images/07-recommended-card.jpg"><img src="images/07-recommended-card.jpg" alt="A Recommended card at the end of Period 3. Click Add inside the outlined card (1)." loading="lazy"></a><figcaption>A Recommended card at the end of Period 3. Click Add inside the outlined card (1).</figcaption></figure>
-<p>Add opens a Customise dialog with the description already filled in. For a slide deck I could choose Detailed deck or Presenter slides, the language, the length (Short or Default) and the sources, then click <strong>Generate now</strong>.</p>
-<figure><a href="images/08-customise.jpg"><img src="images/08-customise.jpg" alt="The slide deck options (1), then Generate now (2)." loading="lazy"></a><figcaption>The slide deck options (1), then Generate now (2).</figcaption></figure>
-<p>I generated the Period 1 infographic. It took about two to three minutes and appears inside the report and as its own item in the Studio list. The area model of (a + b)² is correct, and so is the equation example: x² − 1 = 24 gives x = ±5.</p>
-<figure><a href="images/09-infographic.jpg"><img src="images/09-infographic.jpg" alt="The generated infographic, ready to project or print." loading="lazy"></a><figcaption>The generated infographic, ready to project or print.</figcaption></figure>
-<p>That is the infographic. I tried the other cards too; Step 6 says which one I would use where.</p>
-<h2 id="step-6">Step 6: Choose the right card for the right job</h2>
-<p>You do not need every card in every lesson. A card earns its place only at the moment in the period where it saves you time. I tried four more cards from the Studio panel, where the same tiles open the same Customise dialogs without a report, so you can type your own topic. Here is what I would use where.</p>
-<div class="table-wrap"><table>
-<thead><tr><th>Card</th><th>Best moment</th><th>What I got</th><th>My verdict</th></tr></thead>
-<tbody>
-<tr><td>Flashcards</td><td>First 5 minutes: recall</td><td>50 cards on the default setting</td><td>Choose Fewer for one period</td></tr>
-<tr><td>Quiz</td><td>Exit ticket or homework check</td><td>10 questions; question 1 correct</td><td>Check all ten before using</td></tr>
-<tr><td>Mind map</td><td>End of the chapter: revision board</td><td>5 main branches</td><td>Good overview, keep it for revision</td></tr>
-<tr><td>Slide deck</td><td>Before class: a projector-ready start</td><td>9 slides in about 8 minutes; PDF and PowerPoint downloads</td><td>Most class-ready, but slide 6 had a formula slip: check every slide</td></tr>
-<tr><td>Video</td><td>At home, for a student who missed the period</td><td>Not generated</td><td>Not a live-class tool</td></tr>
-</tbody></table></div>
-<p><strong>Flashcards.</strong> I generated cards on the Period 1 identity. The default setting, Standard, gave 50 cards, far more than one period needs, so choose <strong>Fewer</strong>. Card 1 asks "What is the defining characteristic of an algebraic identity?" and flips with <strong>See answer</strong>. I could not flip through the rest in my session, so I have not checked the other 49.</p>
-<figure><a href="images/14-flashcards.jpg"><img src="images/14-flashcards.jpg" alt="Card 1 of 50 (1). The counters (2) let students mark each card right or wrong as they go." loading="lazy"></a><figcaption>Card 1 of 50 (1). The counters (2) let students mark each card right or wrong as they go.</figcaption></figure>
-<p><strong>Quiz.</strong> Standard gave 10 questions. Question 1 asks for the expansion of (5x + 2y)². Option C, 25x² + 20xy + 4y², is correct, and the other options are the slips students really make: coefficients not squared (A), a wrong middle term (B) and no middle term at all (D). I could view only the first question, so I would check the other nine before using it.</p>
-<figure><a href="images/12-quiz.jpg"><img src="images/12-quiz.jpg" alt="Quiz question 1 of 10. The options (1) carry the common mistakes." loading="lazy"></a><figcaption>Quiz question 1 of 10. The options (1) carry the common mistakes.</figcaption></figure>
-<p><strong>Mind map.</strong> I asked for the whole chapter as a revision map. It opened with five branches: Introduction and Concepts, Standard Identities, Geometric Models &amp; Visualisation, Factorisation Techniques, and Applications. Each branch has an arrow to open it. I could not open the sub-branches in my session, so I have not checked what sits under them.</p>
-<figure><a href="images/13-mindmap.jpg"><img src="images/13-mindmap.jpg" alt="The chapter mind map (1): five branches from one centre." loading="lazy"></a><figcaption>The chapter mind map (1): five branches from one centre.</figcaption></figure>
-<p><strong>Slide deck.</strong> I asked for Presenter slides, Short length, for Period 1. It took about 8 minutes, much longer than the other cards, and gave nine slides called "The Blueprint of Algebra": the area model of (a + b)², two numerical tests (negative integers, then fractions) and a closing slide on equation versus identity. In the notebook the deck can be revised (the <strong>Revise</strong> button), played as a presentation, and downloaded as a PDF or PowerPoint file. I only opened the download menu; I did not download anything.</p>
-<figure><a href="images/15-slide-deck.jpg"><img src="images/15-slide-deck.jpg" alt="The finished deck: the Revise button (1) and the nine slides (2). The three-dot menu offers the PDF and PowerPoint downloads." loading="lazy"></a><figcaption>The finished deck: the Revise button (1) and the nine slides (2). The three-dot menu offers the PDF and PowerPoint downloads.</figcaption></figure>
-<p>I checked the maths slide by slide. Slides 7 and 8 are right: (−2/3 + 3/4)² and its expansion both give 1/144, and x² − 1 = 24 gives x = ±5. Slide 6 has a mistake in a label: the right-hand side is written a² + ab + 2ab + b², with an extra ab. The steps underneath (4 + 12 + 9 = 25) are correct, so only the label is wrong, but a student who reads the label would copy the error. I also saw a stray brace in "(a + b) units}" on slide 2, and I did not examine slides 3 to 5 closely. Open every slide before you project the deck.</p>
-<figure><a href="images/16-slide-error.jpg"><img src="images/16-slide-error.jpg" alt="Slide 6: the right-hand side label (1) should read a² + 2ab + b²." loading="lazy"></a><figcaption>Slide 6: the right-hand side label (1) should read a² + 2ab + b².</figcaption></figure>
-<p><strong>Video.</strong> I did not generate a video. It is listed in the Studio panel as Video Overview, so I cannot say how good it is. My view is that a video suits homework or a student who missed the period better than a live class. If you try one, watch all of it first and check the maths.</p>
-<h3>Right tool, right place</h3>
-<ul>
-<li><p><strong>Before class:</strong> the report for the plan, and a slide deck or infographic only if you will project it.</p></li>
-<li><p><strong>First 5 minutes:</strong> flashcards on Fewer, in place of your recall questions.</p></li>
-<li><p><strong>Board work:</strong> none of them. My own board and the textbook's figures do the teaching.</p></li>
-<li><p><strong>Last 3 minutes, or homework:</strong> the quiz.</p></li>
-<li><p><strong>End of the chapter:</strong> the mind map as a revision board.</p></li>
-<li><p><strong>A student who missed the period:</strong> the video, if you have checked it.</p></li>
-</ul>
-<p>One report plus one card per period is plenty. If the report already gives you the thing, such as an exit ticket, skip the card.</p>
-<h2 id="check">Check before class</h2>
-<p>I recomputed every worked number in the report, and they were correct: for example 29² = 841, 119² = 14161, Example 15 giving x³ + y³ + z³ = 145, and the pool in Example 18 being 12 m by 8 m. I also asked the notebook's own chat, which cites the source, to list the exercises, the numbered examples and the date for Śhrīdharāchārya; the example numbers I checked matched. That is not a page-by-page check against the printed book, so keep the textbook open when you review.</p>
-<p>Things I would fix by hand:</p>
-<ul>
-<li><p><strong>Two different checks are both labelled "Example 2"</strong> in Period 1.</p></li>
-<li><p><strong>Period 1, Step D</strong> says (a + b)² is smaller than a² + b² "if one variable is negative". It should say exactly one is negative and the other is not zero.</p></li>
-<li><p><strong>Period 3 pair activity</strong> says n is "the tens digit" in the squares-ending-in-5 pattern. For 105² the number before the 5 is 10, which gives 10 × 11 = 110 and 105² = 11025, so say "the number before the 5".</p></li>
-<li><p><strong>Exercise Set 4.5 is not mapped</strong> in Periods 1 to 5.</p></li>
-<li><p><strong>Units and activities:</strong> my follow-up report used "hastas" as the unit in a garden problem, which I could not confirm in the chapter, and its pair activity repeated an end-of-chapter question that it also set as classwork.</p></li>
-<li><p><strong>Slide 6 of the slide deck</strong> has an extra "ab" in a formula label (see Step 6). The cards need the same maths check as the report.</p></li>
-</ul>
-<h2 id="wrong">When it goes wrong</h2>
-<p>My first report stopped mid-sentence in Period 6, so the closing section on common errors, differentiation and competency-based questions never appeared. The not-equal sign also printed as "eq".</p>
-<figure><a href="images/10-glitch-truncated.jpg"><img src="images/10-glitch-truncated.jpg" alt="Top: &quot;≠&quot; printed as &quot;eq&quot; (1). Bottom: the report ends mid-line in Example 18 (2)." loading="lazy"></a><figcaption>Top: "≠" printed as "eq" (1). Bottom: the report ends mid-line in Example 18 (2).</figcaption></figure>
-<p>Some LaTeX also appeared raw instead of as symbols, here in a Period 4 hinge question:</p>
-<figure><a href="images/11-latex-glitch.jpg"><img src="images/11-latex-glitch.jpg" alt="Raw LaTeX in a hinge question (1)." loading="lazy"></a><figcaption>Raw LaTeX in a hinge question (1).</figcaption></figure>
-<p>The fix was a second, narrower report. A finished report cannot be edited in place (its menu only offers Delete), and the instruction box is empty each time, so I pasted a new prompt. This one recovered the missing parts in about 90 seconds and displayed every symbol correctly:</p>
-<pre><code>Create ONLY the following two parts of a live-class Teaching Workflow for a Class IX CBSE Maths teacher, using only the uploaded source. Keep it concise. Part A: Period 6 in full (40 minutes) on rational expressions and real-world modelling, covering Examples 16, 17 and 18. Include: measurable learning objective, 2-3 prerequisite recall questions, a hook, step-by-step board-work sequence, 2-3 hinge questions with expected answers and likely misconceptions, one short pair activity, classwork and homework mapped to the relevant exercise sets and problem numbers in the chapter, and a 3-minute exit ticket. Part B: a closing section on common errors across the chapter, differentiation (support and extension), and competency-based question ideas. Write every mathematical symbol, including the not-equal sign, in standard LaTeX so it displays correctly.</code></pre>
-<p>Next time, for a long chapter, I will generate a few periods at a time instead of the whole chapter in one go.</p>
-<h2 id="live">Using it in the live class</h2>
-<p>This is how I plan to run Period 6 from my follow-up report, which covers Examples 16 to 18. It fits a 40-minute period with two minutes to spare:</p>
-<div class="table-wrap"><table>
-<thead><tr><th>Segment</th><th>Minutes</th></tr></thead>
-<tbody>
-<tr><td>Recall questions</td><td>3</td></tr>
-<tr><td>Hook: design a pool with area 96 m²</td><td>2</td></tr>
-<tr><td>Board work: Examples 16, 17, 18</td><td>20</td></tr>
-<tr><td>Hinge questions</td><td>5</td></tr>
-<tr><td>Pair activity</td><td>5</td></tr>
-<tr><td>Exit ticket</td><td>3</td></tr>
-</tbody></table></div>
-<p>On my board, Example 18 will run like this: the breadth is 4 m less than the length x, so x(x − 4) = 96, which gives x² − 4x − 96 = 0 and (x − 12)(x + 8) = 0. The length is 12 m, the breadth 8 m, and x = −8 is rejected because a length cannot be negative. The report's second hinge question fits straight after it: why can you not write x = 4 or x = 96 from x² − 4x − 96 = 0?</p>
-<ul>
-<li><p>I will print the period or keep it open beside the textbook, and teach from the textbook's own figures.</p></li>
-<li><p>I will put the hinge questions on the board as written and listen for the misconception the report names.</p></li>
-<li><p>I will use the exit ticket to decide how to open the next period.</p></li>
-</ul>
-<h2 id="verdict">My verdict</h2>
-<p>In under ten minutes I had a six-period skeleton built from the chapter's own examples and exercises. It is a first draft, not a finished lesson plan: I still check every number, fix the slips listed above, and teach from the textbook. But the blank page is gone. The most useful lesson was not a feature but a habit: pick one card for each moment of the period and ignore the rest.</p>
-<p>If you try this on another chapter, I would like to hear what you changed. Find me on X: <a href="https://x.com/RRTiwari19">@RRTiwari19</a>.</p>
-<h2 id="sources">Sources</h2>
-<ul>
-<li><p><a href="https://ncert.nic.in/textbook.php">NCERT online textbooks: Class IX Mathematics, Ganita Manjari</a>: chapter list and PDFs; includes the copyright and terms of use, opened 4 October 2026.</p></li>
-<li><p><a href="https://notebook.google.com">Gemini Notebook</a>: all screenshots taken on 4 October 2026; menu names and options may change.</p></li>
-</ul>
-
-<div class="cta"><b>Tried it on another chapter?</b> I would like to hear what you changed. Find me on X: <a href="https://x.com/RRTiwari19">@RRTiwari19</a>, or read and subscribe on <a href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">Substack</a>.</div>
-</main>
+<section class="about" aria-labelledby="about-h">
+<img src="images/raman-photo.jpg" alt="Radha Raman Tiwari">
+<div>
+<h2 id="about-h">About me</h2>
+<p>I am Radha Raman Tiwari. I am a maths teacher with 15+ years of experience, and I am the Head of Examination at Suditi Global Academy in Mainpuri, Uttar Pradesh.</p>
+<p>My work sits between the classroom and the examination office: designing lessons, running school and board examinations from question paper to result, and finding tools that save a teacher's time without lowering the standard. These guides are the notes I keep for myself and my colleagues.</p>
+<ul class="facts"><li>Maths teacher, 15+ years of experience</li><li>Head of Examination, Suditi Global Academy (CBSE)</li><li>Writing on <a href="https://rrtiwari.substack.com">Substack</a> and posting on <a href="https://x.com/RRTiwari19">X</a></li></ul>
 </div>
-<footer>&copy; 2026 Radha Raman Tiwari. Screenshots are from Gemini Notebook, taken on 4 October 2026; menu names and options may change. NCERT material is not reproduced here; use the official NCERT PDF.</footer>
-<script>
-(function(){
-var links=[].slice.call(document.querySelectorAll('#toc a'));
-var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
-var heads=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))}).filter(Boolean);
-function spy(){var y=window.scrollY+120,cur=heads[0];heads.forEach(function(h){if(h.offsetTop<=y)cur=h});
-links.forEach(function(a){a.classList.toggle('on',a===map[cur.id])})}
-document.addEventListener('scroll',spy,{passive:true});spy();
-document.querySelectorAll('.toc-m a').forEach(function(a){a.addEventListener('click',function(){a.closest('details').open=false})});
-})();
-</script>
+</section>
+<section class="guides" aria-labelledby="guides-h">
+<h2 id="guides-h">Guides</h2>
+<a class="card" href="gemini-notebook-interactive-reports/">
+<img src="images/09-infographic.jpg" alt="An algebraic identities infographic made by Gemini Notebook" loading="lazy">
+<div><h3>How I Turned an NCERT Chapter into a Live-Class Teaching Workflow with Gemini Notebook</h3><p>A step-by-step guide to Interactive Reports, with the exact prompt, the checks I ran and the cards I would actually use</p><span class="go">Read the guide &rarr;</span></div>
+</a>
+<p class="soon">New guides will be added here.</p>
+</section>
+</main>
+<footer>&copy; 2026 Radha Raman Tiwari.</footer>
 </body>
 </html>

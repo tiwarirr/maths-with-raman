@@ -10,7 +10,7 @@ body = open(base + '/site_build/body.html', encoding='utf-8').read()
 def fig(m):
     name, cap = m.group(1), m.group(2)
     alt = html.escape(re.sub(r'<[^>]+>', '', cap), quote=True)
-    return (f'<figure><a href="images/{name}.jpg"><img src="images/{name}.jpg" alt="{alt}" loading="lazy"></a>'
+    return (f'<figure><a href="../images/{name}.jpg"><img src="../images/{name}.jpg" alt="{alt}" loading="lazy"></a>'
             f'<figcaption>{cap}</figcaption></figure>')
 body = re.sub(r'<p>\[IMG:([\w-]+)\]</p>\s*<p><em>(.*?)</em></p>', fig, body, flags=re.S)
 assert '[IMG:' not in body, 'unreplaced marker'
@@ -49,10 +49,10 @@ page = f'''<!doctype html>
 <meta property="og:type" content="article">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{sub}">
-<meta property="og:image" content="images/09-infographic.jpg">
+<meta property="og:image" content="https://maths-with-raman.pages.dev/images/09-infographic.jpg">
 <link rel="alternate" href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="images/raman.png">
+<link rel="icon" href="../images/raman.png">
 <style>
 :root{{--bg:#fff;--fg:#1a2233;--muted:#5b6578;--accent:#b3267a;--line:#e3e6ec;--card:#f5f7fa;--code:#f1f3f7;--ink:#101a2e;--serif:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;--ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}}
 @media (prefers-color-scheme:dark){{:root{{--bg:#0d1424;--fg:#e6eaf2;--muted:#9aa6bd;--accent:#ff7cc3;--line:#26324a;--card:#141d33;--code:#18223a}}}}
@@ -62,6 +62,8 @@ html{{scroll-behavior:smooth}}
 body{{margin:0;background:var(--bg);color:var(--fg);font:19px/1.75 var(--serif);-webkit-text-size-adjust:100%}}
 a{{color:var(--accent);text-underline-offset:3px}}
 a:focus-visible,summary:focus-visible{{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}}
+.crumb{{font:15px/1 var(--ui);margin:0 0 22px}}
+.crumb a{{text-decoration:none}}
 .top{{max-width:1120px;margin:0 auto;padding:40px 24px 28px}}
 h1{{font:700 clamp(30px,4.2vw,46px)/1.12 var(--serif);letter-spacing:-.015em;margin:0 0 16px;max-width:24ch}}
 .sub{{font:400 clamp(18px,2vw,21px)/1.5 var(--serif);color:var(--muted);margin:0 0 22px;max-width:34em}}
@@ -116,10 +118,11 @@ body{{font-size:18px}}
 </head>
 <body>
 <header class="top">
+<p class="crumb"><a href="../">&larr; Maths with Raman</a></p>
 <h1>{title}</h1>
 <p class="sub">{sub}</p>
 <div class="author">
-<img src="images/raman.png" alt="">
+<img src="../images/raman.png" alt="">
 <div><b>Radha Raman Tiwari</b><span>Maths teacher and Head of Examination, Suditi Global Academy, Mainpuri</span></div>
 <span class="links"><a href="https://x.com/RRTiwari19">@RRTiwari19 on X</a><a href="https://rrtiwari.substack.com/p/how-i-turned-an-ncert-chapter-into">Also on Substack</a></span>
 </div>
@@ -149,6 +152,9 @@ document.querySelectorAll('.toc-m a').forEach(function(a){{a.addEventListener('c
 </body>
 </html>
 '''
-open(out + '/index.html', 'w', encoding='utf-8').write(page)
+GUIDE='gemini-notebook-interactive-reports'
+os.makedirs(out+'/'+GUIDE)
+open(out + '/'+GUIDE+'/index.html', 'w', encoding='utf-8').write(page)
+exec(open(base+'/site_build/home.py',encoding='utf-8').read())
 open(out + '/_headers', 'w').write('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/images/*\n  Cache-Control: public, max-age=31536000, immutable\n')
 print(len(page), 'bytes;', len(heads), 'sections;', len(os.listdir(out+'/images')), 'images')
